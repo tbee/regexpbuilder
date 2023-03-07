@@ -4,11 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.Matcher;
+import static org.tbee.regexpbuilder.RE.*;
 
 public class RegExpTest {
 
     @Test
-    public void exact() {
+    public void exactTest() {
         RegExp regExp = RegExp.of()
                 .exact("^foo");
         Assertions.assertEquals("\\^foo", regExp.toString());
@@ -17,7 +18,7 @@ public class RegExpTest {
     }
 
     @Test
-    public void oneOf() {
+    public void oneOfTest() {
         RegExp regExp = RegExp.of()
                 .oneOf("abc");
         Assertions.assertEquals("[abc]", regExp.toString());
@@ -26,7 +27,7 @@ public class RegExpTest {
     }
 
     @Test
-    public void notOneOf() {
+    public void notOneOfTest() {
         RegExp regExp = RegExp.of()
                 .notOneOf("abc");
         Assertions.assertEquals("[^abc]", regExp.toString());
@@ -35,7 +36,7 @@ public class RegExpTest {
     }
 
     @Test
-    public void startOfLine() {
+    public void startOfLineTest() {
         RegExp regExp = RegExp.of()
                 .startOfLine()
                 .exact("^foo");
@@ -45,7 +46,7 @@ public class RegExpTest {
     }
 
     @Test
-    public void endOfLine() {
+    public void endOfLineTest() {
         RegExp regExp = RegExp.of()
                 .exact("^foo")
                 .endOfLine();
@@ -55,7 +56,7 @@ public class RegExpTest {
     }
 
     @Test
-    public void optionally() {
+    public void optionallyTest() {
         RegExp regExp = RegExp.of()
                 .optional("^foo");
         Assertions.assertEquals("(\\^foo)?", regExp.toString());
@@ -64,7 +65,7 @@ public class RegExpTest {
     }
 
     @Test
-    public void zeroOrMore() {
+    public void zeroOrMoreTest() {
         RegExp regExp = RegExp.of()
                 .zeroOrMore("^foo");
         Assertions.assertEquals("(\\^foo)*", regExp.toString());
@@ -73,7 +74,7 @@ public class RegExpTest {
     }
 
     @Test
-    public void oneOrMore() {
+    public void oneOrMoreTest() {
         RegExp regExp = RegExp.of()
                 .oneOrMore("^foo");
         Assertions.assertEquals("(\\^foo)+", regExp.toString());
@@ -82,9 +83,9 @@ public class RegExpTest {
     }
 
     @Test
-    public void group() {
+    public void groupTest() {
         RegExp regExp = RegExp.of()
-                .group("g1", e -> e.digit().digit())
+                .group("g1", digit().digit())
                 .referToGroup("g1")
                 .referToGroup("g1");
         Assertions.assertEquals("(\\d\\d)\\1\\1", regExp.toString());
@@ -93,40 +94,40 @@ public class RegExpTest {
     }
 
     @Test
-    public void getGroup() {
+    public void getGroupTest() {
         RegExp regExp = RegExp.of()
-                .group("g1", e -> e.digit().digit())
-                .group("g2", e -> e.digit().digit())
-                .group("g3", e -> e.digit().digit());
+                .group("g1", digit().digit())
+                .group("g2", digit().digit())
+                .group("g3", digit().digit());
         Assertions.assertEquals("(\\d\\d)(\\d\\d)(\\d\\d)", regExp.toString());
         Matcher matcher = regExp.toMatcher("123456");
-        Assertions.assertEquals(2, regExp.getGroupIdx("g2"));
+        Assertions.assertEquals(2, regExp.indexOf("g2"));
         Assertions.assertEquals(true, matcher.find());
-        Assertions.assertEquals("34", matcher.group(regExp.getGroupIdx("g2")));
+        Assertions.assertEquals("34", matcher.group(regExp.indexOf("g2")));
     }
 
     @Test
-    public void occurs() {
+    public void occursTest() {
         RegExp regExp = RegExp.of()
-                .occurs(3, e -> e.digit().digit());
+                .occurs(3, digit().digit());
         Assertions.assertEquals("(\\d\\d){3}", regExp.toString());
         Assertions.assertEquals(1, countMatches(regExp.toMatcher("121212")));
         Assertions.assertEquals(0, countMatches(regExp.toMatcher("1234")));
     }
 
     @Test
-    public void occursAtLeast() {
+    public void occursAtLeastTest() {
         RegExp regExp = RegExp.of()
-                .occursAtLeast(2, e -> e.digit().digit());
+                .occursAtLeast(2, digit().digit());
         Assertions.assertEquals("(\\d\\d){2,}", regExp.toString());
         Assertions.assertEquals(1, countMatches(regExp.toMatcher("121212")));
         Assertions.assertEquals(1, countMatches(regExp.toMatcher("123456")));
     }
 
     @Test
-    public void occursBetween() {
+    public void occursBetweenTest() {
         RegExp regExp = RegExp.of()
-                .occursBetween(1, 2, e -> e.digit().digit());
+                .occursBetween(1, 2, digit().digit());
         Assertions.assertEquals("(\\d\\d){1,2}", regExp.toString());
         Assertions.assertEquals(2, countMatches(regExp.toMatcher("121212")));
         Assertions.assertEquals(1, countMatches(regExp.toMatcher("1234")));
@@ -135,15 +136,16 @@ public class RegExpTest {
     }
 
     @Test
-    public void complex() {
+    public void complexTest() {
         RegExp regExp = RegExp.of()
                 .startOfLine()
                 .optional("abc")
-                .group("g1", re -> re.oneOrMore(re2 -> re2.digit().digit()))
-                .group("g2", re -> re.notOneOf("xyz"));
+                .group("g1", oneOrMore(digit().digit()))
+                .group("g2", notOneOf("xyz"));
+        Assertions.assertEquals("^(abc)?((\\d\\d)+)([^xyz])", regExp.toString());
         Matcher matcher = regExp.toMatcher("abc1234def");
         matcher.find();
-        String g1 = matcher.group(regExp.getGroupIdx("g1"));
+        String g1 = matcher.group(regExp.indexOf("g1"));
         Assertions.assertEquals("1234", g1);
     }
 

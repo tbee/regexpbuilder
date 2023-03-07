@@ -2,91 +2,28 @@ package org.tbee.regexpbuilder;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegExp {
 
-    private String regExp = "";
+    private String regExpString = "";
     private int groupIdx = 0;
     private Map<String, Integer> groupNameToIdx = new HashMap<>();
+
+    // -------------------------
+    // FACTORY
 
     public static RegExp of() {
         return new RegExp();
     }
 
-    public RegExp exact(String match) {
-        regExp += escape(match);
-        return this;
-    }
 
-    public RegExp oneOf(String match) {
-        regExp += "[" + escape(match) + "]";
-        return this;
-    }
-
-    public RegExp notOneOf(String match) {
-        regExp += "[^" + escape(match) + "]";
-        return this;
-    }
-
-    public RegExp optional(Consumer<RegExp> consumer) {
-        group(re -> consumer.accept(re));
-        regExp += "?";
-        return this;
-    }
-    public RegExp optional(String s) {
-        return optional(re -> re.exact(s));
-    }
-
-    public RegExp zeroOrMore(Consumer<RegExp> consumer) {
-        group(re -> consumer.accept(re));
-        regExp += "*";
-        return this;
-    }
-    public RegExp zeroOrMore(String s) {
-        return zeroOrMore(re -> re.exact(s));
-    }
-
-    public RegExp oneOrMore(Consumer<RegExp> consumer) {
-        group(re -> consumer.accept(re));
-        regExp += "+";
-        return this;
-    }
-    public RegExp oneOrMore(String s) {
-        return oneOrMore(re -> re.exact(s));
-    }
-
-    public RegExp occurs(int times, Consumer<RegExp> consumer) {
-        group(re -> consumer.accept(re));
-        regExp += "{" + times + "}";
-        return this;
-    }
-    public RegExp occurs(int times, String s) {
-        return occurs(times, re -> re.exact(s));
-    }
-
-    public RegExp occursAtLeast(int times, Consumer<RegExp> consumer) {
-        group(re -> consumer.accept(re));
-        regExp += "{" + times + ",}";
-        return this;
-    }
-    public RegExp occursAtLeast(int times, String s) {
-        return occursAtLeast(times, re -> re.exact(s));
-    }
-
-    public RegExp occursBetween(int minTimes, int maxTimes, Consumer<RegExp> consumer) {
-        group(re -> consumer.accept(re));
-        regExp += "{" + minTimes + "," + maxTimes + "}";
-        return this;
-    }
-    public RegExp occursBetween(int minTimes, int maxTimes, String s) {
-        return occursBetween(minTimes, maxTimes, re -> re.exact(s));
-    }
+    // -------------------------
+    // COMPLEX
 
     private RegExp startGroup(String name) {
-        regExp += "(";
+        regExpString += "(";
         groupIdx++;
         if (name != null) {
             if (groupNameToIdx.containsKey(name)) {
@@ -96,46 +33,136 @@ public class RegExp {
         }
         return this;
     }
-    private RegExp startGroup() {
-        return startGroup(null);
-    }
 
     private RegExp endGroup() {
-        regExp += ")";
+        regExpString += ")";
         return this;
     }
 
-    public RegExp group(String name, Consumer<RegExp> consumer) {
+    public RegExp group(String name, String contents) {
         startGroup(name);
-        consumer.accept(this);
+        regExpString += contents;
         endGroup();
         return this;
     }
-    public RegExp group(Consumer<RegExp> consumer) {
-        return group(null, consumer);
-    }
 
-    public int getGroupIdx(String name) {
-        return groupNameToIdx.get(name);
+    public RegExp group(String name, RegExp regExp) {
+        startGroup(name);
+        regExpString += regExp.regExpString;
+        endGroup();
+        return this;
+    }
+    public RegExp group(RegExp regExp) {
+        return group(null, regExp);
     }
 
     public RegExp referToGroup(String name) {
-        regExp += "\\" + groupNameToIdx.get(name);
+        regExpString += "\\" + groupNameToIdx.get(name);
         return this;
     }
 
+    /**
+     * This method is not part of the building, but is to be used in matcher.group(...)
+     * @param name group name
+     * @return index of the group in the regular expression
+     */
+    public int indexOf(String name) {
+        return groupNameToIdx.get(name);
+    }
+
+    // -------------------------
+    // PATTERN
+
+    public RegExp exact(String match) {
+        regExpString += escape(match);
+        return this;
+    }
+
+    public RegExp oneOf(RegExp regExp) {
+        regExpString += "[" + regExp.regExpString + "]";
+        return this;
+    }
+    public RegExp oneOf(String match) {
+        return oneOf(RegExp.of().exact(match));
+    }
+
+    public RegExp notOneOf(RegExp regExp) {
+        regExpString += "[^" + regExp.regExpString + "]";
+        return this;
+    }
+    public RegExp notOneOf(String match) {
+        return notOneOf(RegExp.of().exact(match));
+    }
+
+    public RegExp optional(RegExp regExp) {
+        group(regExp);
+        regExpString += "?";
+        return this;
+    }
+    public RegExp optional(String s) {
+        return optional(RegExp.of().exact(s));
+    }
+
+    public RegExp zeroOrMore(RegExp regExp) {
+        group(regExp);
+        regExpString += "*";
+        return this;
+    }
+    public RegExp zeroOrMore(String s) {
+        return zeroOrMore(RegExp.of().exact(s));
+    }
+
+    public RegExp oneOrMore(RegExp regExp) {
+        group(regExp);
+        regExpString += "+";
+        return this;
+    }
+    public RegExp oneOrMore(String s) {
+        return oneOrMore(RegExp.of().exact(s));
+    }
+
+    public RegExp occurs(int times, RegExp regExp) {
+        group(regExp);
+        regExpString += "{" + times + "}";
+        return this;
+    }
+    public RegExp occurs(int times, String s) {
+        return occurs(times, RegExp.of().exact(s));
+    }
+
+    public RegExp occursAtLeast(int times, RegExp regExp) {
+        group(regExp);
+        regExpString += "{" + times + ",}";
+        return this;
+    }
+    public RegExp occursAtLeast(int times, String s) {
+        return occursAtLeast(times, RegExp.of().exact(s));
+    }
+
+    public RegExp occursBetween(int minTimes, int maxTimes, RegExp regExp) {
+        group(regExp);
+        regExpString += "{" + minTimes + "," + maxTimes + "}";
+        return this;
+    }
+    public RegExp occursBetween(int minTimes, int maxTimes, String s) {
+        return occursBetween(minTimes, maxTimes, RegExp.of().exact(s));
+    }
+
+    // -------------------------
+    // LITERAL
+
     public RegExp anyChar() {
-        regExp += ".";
+        regExpString += ".";
         return this;
     }
 
     public RegExp startOfLine() {
-        regExp += "^";
+        regExpString += "^";
         return this;
     }
 
     public RegExp endOfLine() {
-        regExp += "$";
+        regExpString += "$";
         return this;
     }
 
@@ -144,7 +171,7 @@ public class RegExp {
      * @return
      */
     public RegExp digit() {
-        regExp += "\\d";
+        regExpString += "\\d";
         return this;
     }
 
@@ -153,7 +180,7 @@ public class RegExp {
      * @return
      */
     public RegExp nonDigit() {
-        regExp += "\\D";
+        regExpString += "\\D";
         return this;
     }
 
@@ -162,7 +189,7 @@ public class RegExp {
      * @return
      */
     public RegExp whitespace() {
-        regExp += "\\s";
+        regExpString += "\\s";
         return this;
     }
 
@@ -171,7 +198,7 @@ public class RegExp {
      * @return
      */
     public RegExp nonWhitespace() {
-        regExp += "\\S";
+        regExpString += "\\S";
         return this;
     }
 
@@ -180,7 +207,7 @@ public class RegExp {
      * @return
      */
     public RegExp wordChar() {
-        regExp += "\\w";
+        regExpString += "\\w";
         return this;
     }
 
@@ -189,26 +216,29 @@ public class RegExp {
      * @return
      */
     public RegExp nonWordChar() {
-        regExp += "\\W";
+        regExpString += "\\W";
         return this;
     }
 
     public RegExp wordBoundary() {
-        regExp += "\\b";
+        regExpString += "\\b";
         return this;
     }
 
     public RegExp nonWordBoundary() {
-        regExp += "\\B";
+        regExpString += "\\B";
         return this;
     }
 
+    // -------------------------
+    // BUILD
+
     public String toString() {
-        return regExp;
+        return regExpString;
     }
 
     public Pattern toPattern() {
-        Pattern pattern = Pattern.compile(regExp);
+        Pattern pattern = Pattern.compile(regExpString);
         return pattern;
     }
 
@@ -216,6 +246,9 @@ public class RegExp {
         Matcher matcher = toPattern().matcher(text);
         return matcher;
     }
+
+    // -------------------------
+    // SUPPORT
 
     private String escape(String s) {
         s = s.replace("\\", "\\\\");
