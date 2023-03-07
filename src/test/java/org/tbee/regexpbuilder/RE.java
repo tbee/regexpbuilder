@@ -2,7 +2,14 @@ package org.tbee.regexpbuilder;
 
 public class RE {
 
-    // -------------------------
+    public RegExp group(String name, String s) {
+        return RegExp.of().group(name, s);
+    }
+
+    public RegExp group(String name, RegExp regExp) {
+        return RegExp.of().group(name, regExp);
+    }
+        // -------------------------
     // PATTERN
 
     static public RegExp exact(String s) {

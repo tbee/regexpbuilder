@@ -17,8 +17,9 @@ RegExp regExp = RegExp.of()
                       .optional("abc")
                       .group("g1", oneOrMore(digit().digit()))
                       .group("g2", notOneOf("xyz"));
-Matcher matcher = regExp.toMatcher("abc1234def");
+Matcher matcher = regExp.toMatcher("abc1234de");
 matcher.find();
 String g1 = matcher.group(regExp.indexOf("g1")); // results in "1234"
+String g2 = matcher.group(regExp.indexOf("g2")); // results in "de"
 ```
 

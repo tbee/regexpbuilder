@@ -39,21 +39,14 @@ public class RegExp {
         return this;
     }
 
-    public RegExp group(String name, String contents) {
-        startGroup(name);
-        regExpString += contents;
-        endGroup();
-        return this;
-    }
-
     public RegExp group(String name, RegExp regExp) {
         startGroup(name);
         regExpString += regExp.regExpString;
         endGroup();
         return this;
     }
-    public RegExp group(RegExp regExp) {
-        return group(null, regExp);
+    public RegExp group(String name, String s) {
+        return group(name, RegExp.of().exact(s));
     }
 
     public RegExp referToGroup(String name) {
@@ -95,8 +88,7 @@ public class RegExp {
     }
 
     public RegExp optional(RegExp regExp) {
-        group(regExp);
-        regExpString += "?";
+        regExpString += regExp.regExpString + "?";
         return this;
     }
     public RegExp optional(String s) {
@@ -104,8 +96,7 @@ public class RegExp {
     }
 
     public RegExp zeroOrMore(RegExp regExp) {
-        group(regExp);
-        regExpString += "*";
+        regExpString += regExp.regExpString + "*";
         return this;
     }
     public RegExp zeroOrMore(String s) {
@@ -113,8 +104,7 @@ public class RegExp {
     }
 
     public RegExp oneOrMore(RegExp regExp) {
-        group(regExp);
-        regExpString += "+";
+        regExpString += regExp.regExpString + "+";
         return this;
     }
     public RegExp oneOrMore(String s) {
@@ -122,8 +112,7 @@ public class RegExp {
     }
 
     public RegExp occurs(int times, RegExp regExp) {
-        group(regExp);
-        regExpString += "{" + times + "}";
+        regExpString += regExp.regExpString + "{" + times + "}";
         return this;
     }
     public RegExp occurs(int times, String s) {
@@ -131,8 +120,7 @@ public class RegExp {
     }
 
     public RegExp occursAtLeast(int times, RegExp regExp) {
-        group(regExp);
-        regExpString += "{" + times + ",}";
+        regExpString += regExp.regExpString + "{" + times + ",}";
         return this;
     }
     public RegExp occursAtLeast(int times, String s) {
@@ -140,8 +128,7 @@ public class RegExp {
     }
 
     public RegExp occursBetween(int minTimes, int maxTimes, RegExp regExp) {
-        group(regExp);
-        regExpString += "{" + minTimes + "," + maxTimes + "}";
+        regExpString += regExp.regExpString + "{" + minTimes + "," + maxTimes + "}";
         return this;
     }
     public RegExp occursBetween(int minTimes, int maxTimes, String s) {
