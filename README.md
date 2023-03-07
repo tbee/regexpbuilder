@@ -19,6 +19,6 @@ RegExp regExp = RegExp.of()
                       .group("g2", notOneOf("xyz"));
 Matcher matcher = regExp.toMatcher("abc1234def");
 matcher.find();
-String g1 = matcher.group(regExp.getGroupIdx("g1")); // 1234
+String g1 = matcher.group(regExp.indexOf("g1")); // results in "1234"
 ```
 
