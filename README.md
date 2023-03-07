@@ -19,6 +19,41 @@ RegExp regExp = RegExp.of()
 Matcher matcher = regExp.toMatcher("abc1234de");
 matcher.find();
 String g1 = matcher.group(regExp.indexOf("g1")); // results in "1234"
-String g2 = matcher.group(regExp.indexOf("g2")); // results in "de"
 ```
 
+It becomes interesting when things are more complex, for example for a log line:
+
+```java
+// RegExp for this: 127.0.0.1 - - [21/Jul/2014:9:55:27 -0800] "GET /home.html HTTP/1.1" 200 2048
+RegExpCore regExp = RegExp.of()
+        .group("ip", oneOrMore(nonWhitespace()))
+        .whitespace()
+        .group("client", oneOrMore(nonWhitespace()))
+        .whitespace()
+        .group("user", oneOrMore(nonWhitespace()))
+        .whitespace()
+        .text("[")
+        .group("datetime", oneOrMore(oneOf(wordChar().or().text(":/"))))
+        .whitespace()
+        .group("offset", oneOf("+-").followedBy().occurs(4, digit()))
+        .text("]")
+        .whitespace()
+        .text("\"")
+        .group("method", oneOrMore(nonWhitespace()))
+        .whitespace()
+        .group("url", oneOrMore(nonWhitespace()))
+        .whitespace()
+        .group("http", oneOrMore(nonWhitespace()))
+        .text("\"")
+        .whitespace()
+        .group("status", oneOrMore(digit()))
+        .whitespace()
+        .group("size", oneOrMore(digit()));
+
+String logLine = "127.0.0.1 - - [21/Jul/2014:9:55:27 -0800] \"GET /home.html HTTP/1.1\" 200 2048";
+Matcher matcher = regExp.toMatcher(logLine);
+matcher.group(regExp.indexOf("datetime"); // returns "21/Jul/2014:9:55:27"
+```
+
+The `or()`, `and()`, and `followedBy()` are dummy methods, solely present for readability.
+They can be omitted.
