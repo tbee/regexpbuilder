@@ -2,13 +2,12 @@
 Regular expressions are powerful but not easily readable. 
 It is not without reason that the 'saying' goes like this:
 
-_Once a programmer had a problem. He tried to solve that with regulars expressions. Then he had two problems._
+_Once a programmer had a problem., he tried to solve that with regulars expressions, then he had two problems._
 
-Now, there are other implementations of such a builder, like the one by [Sergey](https://github.com/sgreben/regex-builder).
+Now, there are already implementations of a RegEx builder, like the one by [Sergey](https://github.com/sgreben/regex-builder).
 But I'm not sure I like the API, so this is my attempt at writing one:
 
 ```java
-
 import org.tbee.regexpbuilder.RegExp;
 import static org.tbee.regexpbuilder.RE.*;
 
