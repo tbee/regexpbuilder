@@ -51,11 +51,12 @@ RegExp regExp = RegExp.of()
         .group("http", oneOrMore(nonWhitespace()))
         .text("\" ")
         .group("status", oneOrMore(digit()))
-        .whitespace()
+        .text(" ")
         .group("size", oneOrMore(digit()));
 
 String logLine = "127.0.0.1 - - [21/Jul/2014:9:55:27 -0800] \"GET /home.html HTTP/1.1\" 200 2048";
 Matcher matcher = regExp.toMatcher(logLine);
+matcher.matches();
 matcher.group(regExp.indexOf("datetime"); // returns "21/Jul/2014:9:55:27"
 ```
 
