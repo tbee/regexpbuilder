@@ -25,7 +25,7 @@ It becomes interesting when things are more complex, for example for a log line:
 
 ```java
 // RegExp for this: 127.0.0.1 - - [21/Jul/2014:9:55:27 -0800] "GET /home.html HTTP/1.1" 200 2048
-RegExpCore regExp = RegExp.of()
+RegExp regExp = RegExp.of()
         .group("ip", oneOrMore(nonWhitespace()))
         .text(" ")
         .group("client", oneOrMore(nonWhitespace()))
@@ -65,6 +65,6 @@ Just include a dependency in your project. For the latest version see [Maven cen
 <dependency>
     <groupId>org.tbee.regexpbuilder</groupId>
     <artifactId>regexpbuilder</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```

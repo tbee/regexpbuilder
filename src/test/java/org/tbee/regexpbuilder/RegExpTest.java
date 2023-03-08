@@ -19,6 +19,13 @@ public class RegExpTest {
     }
 
     @Test
+    public void rangeTest() {
+        RegExp regExp = RegExp.of()
+                .range("0", "9");
+        Assertions.assertEquals("[0-9]", regExp.toString());
+    }
+
+    @Test
     public void oneOfTest() {
         RegExp regExp = RegExp.of()
                 .oneOf("abc");
@@ -81,6 +88,13 @@ public class RegExpTest {
         Assertions.assertEquals("\\[foo+", regExp.toString());
         Assertions.assertEquals(2, countMatches(regExp.toMatcher("[foo[foo")));
         Assertions.assertEquals(2, countMatches(regExp.toMatcher("[foobar[foo")));
+    }
+
+    @Test
+    public void anyOfTest() {
+        RegExp regExp = RegExp.of()
+                .anyOf("^aaa", "$bbb", "(ccc", digit().wordChar());
+        Assertions.assertEquals("\\^aaa|\\$bbb|\\(ccc|\\d\\w", regExp.toString());
     }
 
     @Test
@@ -152,6 +166,7 @@ public class RegExpTest {
     @Test
     public void apacheLogTest() {
         RegExp regExp = RegExp.of()
+                .startOfLine()
                 .group("ip", oneOrMore(nonWhitespace()))
                 .text(" ")
                 .group("client", oneOrMore(nonWhitespace()))
@@ -170,7 +185,8 @@ public class RegExpTest {
                 .text("\" ")
                 .group("status", oneOrMore(digit()))
                 .whitespace()
-                .group("size", oneOrMore(digit()));
+                .group("size", oneOrMore(digit()))
+                .endOfLine();
 
         // https://github.com/sgreben/regex-builder#examples
         System.out.println(regExp.toString());

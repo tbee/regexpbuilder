@@ -16,6 +16,9 @@ public class RE {
     static public RegExp text(String s) {
         return RegExp.of().text(s);
     }
+    static public RegExp range(String fromChar, String toChar) {
+        return RegExp.of().range(fromChar, toChar);
+    }
 
     static public RegExp oneOf(RegExp regExp) {
         return RegExp.of().oneOf(regExp);

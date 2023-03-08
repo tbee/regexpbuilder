@@ -20,7 +20,7 @@ public class RegExp {
 
 
     // -------------------------
-    // COMPLEX
+    // GROUP
 
     private RegExp startGroup(String name) {
         regExpString += "(";
@@ -66,71 +66,216 @@ public class RegExp {
     // -------------------------
     // PATTERN
 
-    public RegExp text(String match) {
-        regExpString += escape(match);
+    /**
+     * Match a specific text.
+     * Any characters with special meaning in regular expressions will be escape.
+     * @param s the text to match, it does not need to be (regexp) escaped.
+     * @return
+     */
+    public RegExp text(String s) {
+        regExpString += escape(s);
         return this;
     }
 
+    /**
+     * Match a range of text.
+     * Any characters with special meaning in regular expressions will be escape.
+     * @param fromChar the beginning character
+     * @param toChar the beginning character
+     * @return
+     */
+    public RegExp range(String fromChar, String toChar) {
+        if (fromChar.length() != 1 || toChar.length() != 1) {
+            throw new IllegalArgumentException("The character parameters must be exactly 1 in length");
+        }
+        regExpString += "[" + escape(fromChar) + "-" + escape(toChar) + "]";
+        return this;
+    }
+
+    /**
+     * Match one of the characters
+     * @param regExp
+     * @return
+     */
     public RegExp oneOf(RegExp regExp) {
         regExpString += "[" + regExp.toString() + "]";
         return this;
     }
-    public RegExp oneOf(String match) {
-        return oneOf(RegExp.of().text(match));
+    /**
+     * Match one of the characters
+     * @param s
+     * @return
+     */
+    public RegExp oneOf(String s) {
+        return oneOf(RegExp.of().text(s));
     }
 
+    /**
+     * Match any character but the specified ones
+     * @param regExp
+     * @return
+     */
     public RegExp notOneOf(RegExp regExp) {
         regExpString += "[^" + regExp.toString() + "]";
         return this;
     }
-    public RegExp notOneOf(String match) {
-        return notOneOf(RegExp.of().text(match));
+    /**
+     * Match any character but the specified ones
+     * @param s
+     * @return
+     */
+    public RegExp notOneOf(String s) {
+        return notOneOf(RegExp.of().text(s));
     }
 
+    /**
+     * These characters may be present, or not.
+     * @param regExp
+     * @return
+     */
     public RegExp optional(RegExp regExp) {
         regExpString += regExp.toString() + "?";
         return this;
     }
+    /**
+     * These characters may be present, or not.
+     * @param s
+     * @return
+     */
     public RegExp optional(String s) {
         return optional(RegExp.of().text(s));
     }
 
+    /**
+     * These characters can not be present, or once, or many times
+     * @param regExp
+     * @return
+     */
     public RegExp zeroOrMore(RegExp regExp) {
         regExpString += regExp.toString() + "*";
         return this;
     }
+
+    /**
+     * These characters can not be present, or once, or many times
+     * @param s
+     * @return
+     */
     public RegExp zeroOrMore(String s) {
         return zeroOrMore(RegExp.of().text(s));
     }
 
+    /**
+     * These characters must be present once, but can be many times
+     * @param regExp
+     * @return
+     */
     public RegExp oneOrMore(RegExp regExp) {
         regExpString += regExp.toString() + "+";
         return this;
     }
+    /**
+     * These characters must be present once, but can be many times
+     * @param s
+     * @return
+     */
     public RegExp oneOrMore(String s) {
         return oneOrMore(RegExp.of().text(s));
     }
 
+    /**
+     * Match any of the blocks of characters
+     * @param regExps
+     * @return
+     */
+    public RegExp anyOf(RegExp... regExps) {
+        boolean first = true;
+        for (RegExp regExp : regExps) {
+            regExpString += (first ? "" : "|") + regExp.toString();
+            first = false;
+        }
+        return this;
+    }
+    /**
+     * Match any of the blocks of characters
+     * @param ss
+     * @return
+     */
+    public RegExp anyOf(String... ss) {
+        RegExp[] regExps = new RegExp[ss.length];
+        for (int i = 0; i < ss.length; i++) {
+            regExps[i] = RegExp.of().text(ss[i]);
+        }
+        return anyOf(regExps);
+    }
+    /**
+     * Match any of the blocks of characters
+     * @param objects must be a RegExp or otherwise it will be converted to a string
+     * @return
+     */
+    public RegExp anyOf(Object... objects) {
+        RegExp[] regExps = new RegExp[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            if (objects[i] instanceof RegExp regExp) {
+                regExps[i] = regExp;
+            }
+            else {
+                regExps[i] = RegExp.of().text(objects[i].toString());
+            }
+        }
+        return anyOf(regExps);
+    }
+
+    /**
+     * These characters are present N times
+     * @param regExp
+     * @return
+     */
     public RegExp occurs(int times, RegExp regExp) {
         regExpString += regExp.toString() + "{" + times + "}";
         return this;
     }
+    /**
+     * These characters are present N times
+     * @param s
+     * @return
+     */
     public RegExp occurs(int times, String s) {
         return occurs(times, RegExp.of().text(s));
     }
 
+    /**
+     * These characters are present at least N times
+     * @param regExp
+     * @return
+     */
     public RegExp occursAtLeast(int times, RegExp regExp) {
         regExpString += regExp.toString() + "{" + times + ",}";
         return this;
     }
+    /**
+     * These characters are present at least N times
+     * @param s
+     * @return
+     */
     public RegExp occursAtLeast(int times, String s) {
         return occursAtLeast(times, RegExp.of().text(s));
     }
 
+    /**
+     * These characters are present N to M times
+     * @param regExp
+     * @return
+     */
     public RegExp occursBetween(int minTimes, int maxTimes, RegExp regExp) {
         regExpString += regExp.toString() + "{" + minTimes + "," + maxTimes + "}";
         return this;
     }
+    /**
+     * These characters are present N to M times
+     * @param s
+     * @return
+     */
     public RegExp occursBetween(int minTimes, int maxTimes, String s) {
         return occursBetween(minTimes, maxTimes, RegExp.of().text(s));
     }
