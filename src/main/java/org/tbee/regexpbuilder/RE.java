@@ -2,89 +2,89 @@ package org.tbee.regexpbuilder;
 
 public class RE {
 
-    public RegExpCore group(String name, String s) {
+    public RegExp group(String name, String s) {
         return RegExp.of().group(name, s);
     }
 
-    public RegExpCore group(String name, RegExpCore regExp) {
+    public RegExp group(String name, RegExp regExp) {
         return RegExp.of().group(name, regExp);
     }
 
     // -------------------------
     // PATTERN
 
-    static public RegExpCore text(String s) {
+    static public RegExp text(String s) {
         return RegExp.of().text(s);
     }
 
-    static public RegExpCore oneOf(RegExpCore regExp) {
+    static public RegExp oneOf(RegExp regExp) {
         return RegExp.of().oneOf(regExp);
     }
-    static public RegExpCore oneOf(String s) {
+    static public RegExp oneOf(String s) {
         return RegExp.of().oneOf(s);
     }
 
-    static public RegExpCore notOneOf(RegExpCore regExp) {
+    static public RegExp notOneOf(RegExp regExp) {
         return RegExp.of().notOneOf(regExp);
     }
-    static public RegExpCore notOneOf(String s) {
+    static public RegExp notOneOf(String s) {
         return RegExp.of().notOneOf(s);
     }
 
-    static public RegExpCore optional(RegExpCore regExp) {
+    static public RegExp optional(RegExp regExp) {
         return RegExp.of().optional(regExp);
     }
-    static public RegExpCore optional(String s) {
+    static public RegExp optional(String s) {
         return RegExp.of().optional(s);
     }
 
-    static public RegExpCore zeroOrMore(RegExpCore regExp) {
+    static public RegExp zeroOrMore(RegExp regExp) {
         return RegExp.of().zeroOrMore(regExp);
     }
-    static public RegExpCore zeroOrMore(String s) {
+    static public RegExp zeroOrMore(String s) {
         return RegExp.of().zeroOrMore(s);
     }
 
-    static public RegExpCore oneOrMore(RegExpCore regExp) {
+    static public RegExp oneOrMore(RegExp regExp) {
         return RegExp.of().oneOrMore(regExp);
     }
-    static public RegExpCore oneOrMore(String s) {
+    static public RegExp oneOrMore(String s) {
         return RegExp.of().oneOrMore(s);
     }
 
-    static public RegExpCore occurs(int times, RegExpCore regExp) {
+    static public RegExp occurs(int times, RegExp regExp) {
         return RegExp.of().occurs(times, regExp);
     }
-    static public RegExpCore occurs(int times, String s) {
+    static public RegExp occurs(int times, String s) {
         return RegExp.of().occurs(times, s);
     }
 
-    static public RegExpCore occursAtLeast(int times, RegExpCore regExp) {
+    static public RegExp occursAtLeast(int times, RegExp regExp) {
         return RegExp.of().occursAtLeast(times, regExp);
     }
-    static public RegExpCore occursAtLeast(int times, String s) {
+    static public RegExp occursAtLeast(int times, String s) {
         return RegExp.of().occursAtLeast(times, s);
     }
 
-    static public RegExpCore occursBetween(int minTimes, int maxTimes, RegExpCore regExp) {
+    static public RegExp occursBetween(int minTimes, int maxTimes, RegExp regExp) {
         return RegExp.of().occursBetween(minTimes, maxTimes, regExp);
     }
-    static public RegExpCore occursBetween(int minTimes, int maxTimes, String s) {
+    static public RegExp occursBetween(int minTimes, int maxTimes, String s) {
         return RegExp.of().occursBetween(minTimes, maxTimes, s);
     }
 
     // -------------------------
     // LITERAL
 
-    static public RegExpCore anyChar() {
+    static public RegExp anyChar() {
         return RegExp.of().anyChar();
     }
 
-    static public RegExpCore startOfLine() {
+    static public RegExp startOfLine() {
         return RegExp.of().startOfLine();
     }
 
-    static public RegExpBuild endOfLine() {
+    static public RegExp endOfLine() {
         return RegExp.of().endOfLine();
     }
 
@@ -92,7 +92,7 @@ public class RE {
      * Any digit, short for [0-9]
      * @return
      */
-    static public RegExpCore digit() {
+    static public RegExp digit() {
         return RegExp.of().digit();
     }
 
@@ -100,7 +100,7 @@ public class RE {
      * Any non-digit, short for [^0-9]
      * @return
      */
-    static public RegExpCore nonDigit() {
+    static public RegExp nonDigit() {
         return RegExp.of().nonDigit();
     }
 
@@ -108,7 +108,7 @@ public class RE {
      * Any whitespace character, short for [\t\n\x0B\f\r]
      * @return
      */
-    static public RegExpCore whitespace() {
+    static public RegExp whitespace() {
         return RegExp.of().whitespace();
     }
 
@@ -116,7 +116,7 @@ public class RE {
      * Any non-whitespace character, short for [^\s]
      * @return
      */
-    static public RegExpCore nonWhitespace() {
+    static public RegExp nonWhitespace() {
         return RegExp.of().nonWhitespace();
     }
 
@@ -124,7 +124,7 @@ public class RE {
      * Any word character, short for [a-zA-Z_0-9]
      * @return
      */
-    static public RegExpCore wordChar() {
+    static public RegExp wordChar() {
         return RegExp.of().wordChar();
     }
 
@@ -132,15 +132,15 @@ public class RE {
      * Any non-word character, short for [^\w]
      * @return
      */
-    static public RegExpCore nonWordChar() {
+    static public RegExp nonWordChar() {
         return RegExp.of().nonWordChar();
     }
 
-    static public RegExpCore wordBoundary() {
+    static public RegExp wordBoundary() {
         return RegExp.of().wordBoundary();
     }
 
-    static public RegExpCore nonWordBoundary() {
+    static public RegExp nonWordBoundary() {
         return RegExp.of().nonWordBoundary();
     }
 }
