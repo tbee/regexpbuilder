@@ -53,3 +53,18 @@ matcher.group(regExp.indexOf("datetime"); // returns "21/Jul/2014:9:55:27"
 
 The `or()`, `and()`, and `followedBy()` are dummy methods, solely present for readability.
 They can be omitted.
+
+## Support
+There is no formal support for RegExpBuilder: this library is an open source hobby project and no claims can be made.
+Asking for help is always an option. But so is participating, creating pull requests, and other ways of contributing.
+
+## Usage
+Just include a dependency in your project. For the latest version see [Maven central](https://central.sonatype.com/namespace/org.tbee.regexpbuilder)
+
+```xml
+<dependency>
+    <groupId>org.tbee.regexpbuilder</groupId>
+    <artifactId>regexpbuilder</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
