@@ -140,6 +140,14 @@ public class RE {
     static public RegExp word() {
         return RegExp.of().word();
     }
+    /**
+     * Use word()
+     * @return
+     */
+    @Deprecated
+    static public RegExp wordChar() {
+        return word();
+    }
 
     /**
      * Any non-word character, short for [^\w]
@@ -147,6 +155,14 @@ public class RE {
      */
     static public RegExp nonWord() {
         return RegExp.of().nonWord();
+    }
+    /**
+     * Use nonWord()
+     * @return
+     */
+    @Deprecated
+    static public RegExp nonWordChar() {
+        return nonWord();
     }
 
     static public RegExp wordBoundary() {

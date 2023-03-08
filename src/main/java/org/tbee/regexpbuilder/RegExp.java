@@ -342,6 +342,14 @@ public class RegExp {
         regExpString += "\\w";
         return this;
     }
+    /**
+     * Use word()
+     * @return
+     */
+    @Deprecated
+    public RegExp wordChar() {
+        return word();
+    }
 
     /**
      * Any non-word character, short for [^\w]
@@ -350,6 +358,14 @@ public class RegExp {
     public RegExp nonWord() {
         regExpString += "\\W";
         return this;
+    }
+    /**
+     * Use nonWord()
+     * @return
+     */
+    @Deprecated
+    public RegExp nonWordChar() {
+        return nonWord();
     }
 
     public RegExp wordBoundary() {
