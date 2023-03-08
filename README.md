@@ -62,7 +62,8 @@ matcher.group(regExp.indexOf("datetime"); // returns "21/Jul/2014:9:55:27"
 The `or()`, `and()`, and `followedBy()` are dummy methods, solely present for readability and may be omitted.
 
 As always; give it a shot, and let me know where I messed up.
-There are a some places in the API which I'm not totally happy with, so I'd love suggestions. 
+There are a some places in the API which I'm not totally happy with, so I'd love suggestions.
+(For example `oneOf(word().or().text(":/"))` suggests either a word or the text ":/", but it actually is a word or the character ":" or the character "/".)
 
 ## Support
 There is no formal support for RegExpBuilder: this library is an open source hobby project and no claims can be made.
