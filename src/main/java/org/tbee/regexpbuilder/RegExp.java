@@ -338,7 +338,7 @@ public class RegExp {
      * Any word character, short for [a-zA-Z_0-9]
      * @return
      */
-    public RegExp wordChar() {
+    public RegExp word() {
         regExpString += "\\w";
         return this;
     }
@@ -347,7 +347,7 @@ public class RegExp {
      * Any non-word character, short for [^\w]
      * @return
      */
-    public RegExp nonWordChar() {
+    public RegExp nonWord() {
         regExpString += "\\W";
         return this;
     }

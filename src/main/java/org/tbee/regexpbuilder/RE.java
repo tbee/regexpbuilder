@@ -137,16 +137,16 @@ public class RE {
      * Any word character, short for [a-zA-Z_0-9]
      * @return
      */
-    static public RegExp wordChar() {
-        return RegExp.of().wordChar();
+    static public RegExp word() {
+        return RegExp.of().word();
     }
 
     /**
      * Any non-word character, short for [^\w]
      * @return
      */
-    static public RegExp nonWordChar() {
-        return RegExp.of().nonWordChar();
+    static public RegExp nonWord() {
+        return RegExp.of().nonWord();
     }
 
     static public RegExp wordBoundary() {

@@ -93,7 +93,7 @@ public class RegExpTest {
     @Test
     public void anyOfTest() {
         RegExp regExp = RegExp.of()
-                .anyOf("^aaa", "$bbb", "(ccc", digit().wordChar());
+                .anyOf("^aaa", "$bbb", "(ccc", digit().word());
         Assertions.assertEquals("\\^aaa|\\$bbb|\\(ccc|\\d\\w", regExp.toString());
     }
 
@@ -173,7 +173,7 @@ public class RegExpTest {
                 .text(" ")
                 .group("user", oneOrMore(nonWhitespace()))
                 .text(" [")
-                .group("datetime", oneOrMore(oneOf(wordChar().or().text(":/"))))
+                .group("datetime", oneOrMore(oneOf(word().or().text(":/"))))
                 .text(" ")
                 .group("offset", oneOf("+-").followedBy().occurs(4, digit()))
                 .text("] \"")
