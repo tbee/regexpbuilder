@@ -64,6 +64,30 @@ public class RegExpTest {
     }
 
     @Test
+    public void tabTest() {
+        RegExp regExp = RegExp.of()
+                .tab();
+        Assertions.assertEquals("\\t", regExp.toString());
+        Assertions.assertEquals(2, countMatches(regExp.toMatcher("\tbla\t")));
+    }
+
+    @Test
+    public void carriageReturnTest() {
+        RegExp regExp = RegExp.of()
+                .carriageReturn();
+        Assertions.assertEquals("\\r", regExp.toString());
+        Assertions.assertEquals(2, countMatches(regExp.toMatcher("\rbla\r")));
+    }
+
+    @Test
+    public void lineFeed() {
+        RegExp regExp = RegExp.of()
+                .lineFeed();
+        Assertions.assertEquals("\\n", regExp.toString());
+        Assertions.assertEquals(2, countMatches(regExp.toMatcher("\nbla\n")));
+    }
+
+    @Test
     public void optionallyTest() {
         RegExp regExp = RegExp.of()
                 .optional("^foo");

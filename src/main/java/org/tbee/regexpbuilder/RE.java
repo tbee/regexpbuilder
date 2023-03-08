@@ -101,6 +101,16 @@ public class RE {
         return RegExp.of().endOfLine();
     }
 
+    static public RegExp tab() {
+        return RegExp.of().tab();
+    }
+    public RegExp carriageReturn() {
+        return RegExp.of().carriageReturn();
+    }
+    public RegExp lineFeed() {
+        return RegExp.of().lineFeed();
+    }
+
     /**
      * Any digit, short for [0-9]
      * @return

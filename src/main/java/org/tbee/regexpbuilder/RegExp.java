@@ -298,6 +298,19 @@ public class RegExp {
         return this;
     }
 
+    public RegExp tab() {
+        regExpString += "\\t";
+        return this;
+    }
+    public RegExp carriageReturn() {
+        regExpString += "\\r";
+        return this;
+    }
+    public RegExp lineFeed() {
+        regExpString += "\\n";
+        return this;
+    }
+
     /**
      * Any digit, short for [0-9]
      * @return
