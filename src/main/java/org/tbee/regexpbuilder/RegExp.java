@@ -210,7 +210,7 @@ public class RegExp {
     }
     /**
      * Match any of the blocks of characters
-     * @param objects must be a RegExp or otherwise it will be converted to a string
+     * @param objects must be a RegExp and otherwise it will be converted to a string
      * @return
      */
     public RegExp anyOf(Object... objects) {

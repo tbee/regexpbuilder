@@ -55,6 +55,16 @@ public class RE {
         return RegExp.of().oneOrMore(s);
     }
 
+    static public RegExp anyOf(RegExp... regExps) {
+        return RegExp.of().anyOf(regExps);
+    }
+    static public RegExp anyOf(String... ss) {
+        return RegExp.of().anyOf(ss);
+    }
+    static public RegExp anyOf(Object... objects) {
+        return RegExp.of().anyOf(objects);
+    }
+
     static public RegExp occurs(int times, RegExp regExp) {
         return RegExp.of().occurs(times, regExp);
     }
