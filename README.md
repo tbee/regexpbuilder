@@ -40,7 +40,7 @@ RegExp regExp = RegExp.of()
         .text(" ")
         .group("user", oneOrMore(nonWhitespace()))
         .text(" [")
-        .group("datetime", oneOrMore(oneOf(wordChar().or().text(":/"))))
+        .group("datetime", oneOrMore(oneOf(word().or().text(":/"))))
         .text(" ")
         .group("offset", oneOf("+-").followedBy().occurs(4, digit()))
         .text("] \"")
@@ -62,6 +62,7 @@ matcher.group(regExp.indexOf("datetime"); // returns "21/Jul/2014:9:55:27"
 The `or()`, `and()`, and `followedBy()` are dummy methods, solely present for readability and may be omitted.
 
 As always; give it a shot, and let me know where I messed up.
+There are a some places in the API which I'm not totally happy with, so I'd love suggestions. 
 
 ## Support
 There is no formal support for RegExpBuilder: this library is an open source hobby project and no claims can be made.
