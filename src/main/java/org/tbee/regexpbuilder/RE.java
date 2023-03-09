@@ -110,6 +110,9 @@ public class RE {
     public RegExp lineFeed() {
         return RegExp.of().lineFeed();
     }
+    public RegExp doubleQuote() {
+        return RegExp.of().doubleQuote();
+    }
 
     /**
      * Any digit, short for [0-9]

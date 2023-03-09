@@ -118,7 +118,30 @@ public class RegExpTest {
     public void anyOfTest() {
         RegExp regExp = RegExp.of()
                 .anyOf("^aaa", "$bbb", "(ccc", digit().word());
-        Assertions.assertEquals("\\^aaa|\\$bbb|\\(ccc|\\d\\w", regExp.toString());
+        Assertions.assertEquals("(\\^aaa|\\$bbb|\\(ccc|\\d\\w)", regExp.toString());
+    }
+
+    @Test
+    public void anyOfTest2() {
+        RegExp regExp = RegExp.of()
+                .text("For sale: ")
+                .anyOf("cat", "dog", "mouse", "snake", "bird")
+                .text(" food");
+        Assertions.assertEquals("For sale: (cat|dog|mouse|snake|bird) food", regExp.toString());
+        Matcher matcher = regExp.toMatcher("For sale: snake food");
+        Assertions.assertTrue(matcher.matches());
+    }
+
+    @Test
+    public void anyOfTest3() {
+        RegExp regExp = RegExp.of()
+                .text("For sale: ")
+                .group("animal", anyOf("cat", "dog", "mouse", "snake", "bird"))
+                .text(" food");
+        Assertions.assertEquals("For sale: ((cat|dog|mouse|snake|bird)) food", regExp.toString()); // TBEERNOT; can we reduce this to one group?
+        Matcher matcher = regExp.toMatcher("For sale: snake food");
+        Assertions.assertTrue(matcher.matches());
+        Assertions.assertEquals("snake", matcher.group(regExp.indexOf("animal")));
     }
 
     @Test
@@ -228,6 +251,7 @@ public class RegExpTest {
         Assertions.assertEquals("200", matcher.group(regExp.indexOf("status")));
         Assertions.assertEquals("2048", matcher.group(regExp.indexOf("size")));
     }
+
     private int countMatches(Matcher matcher) {
         int matches = 0;
         while (matcher.find()) {

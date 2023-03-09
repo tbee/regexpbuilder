@@ -191,9 +191,10 @@ public class RegExp {
     public RegExp anyOf(RegExp... regExps) {
         boolean first = true;
         for (RegExp regExp : regExps) {
-            regExpString += (first ? "" : "|") + regExp.toString();
+            regExpString += (first ? "(" : "|") + regExp.toString();
             first = false;
         }
+        regExpString += ")";
         return this;
     }
     /**
@@ -210,7 +211,7 @@ public class RegExp {
     }
     /**
      * Match any of the blocks of characters
-     * @param objects must be a RegExp and otherwise it will be converted to a string
+     * @param objects must be a RegExp, and otherwise it will be converted to a string
      * @return
      */
     public RegExp anyOf(Object... objects) {
@@ -308,6 +309,10 @@ public class RegExp {
     }
     public RegExp lineFeed() {
         regExpString += "\\n";
+        return this;
+    }
+    public RegExp doubleQuote() {
+        regExpString += "\\";
         return this;
     }
 
