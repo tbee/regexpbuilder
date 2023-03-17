@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+// TODO: lookbehind etc https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Cheatsheet
+
 public class RegExp {
 
     private String regExpString = "";
@@ -48,6 +50,12 @@ public class RegExp {
     public RegExp group(String name, String s) {
         return group(name, RegExp.of().text(s));
     }
+    public RegExp group(RegExp regExp) {
+        return group(null, regExp);
+    }
+    public RegExp group(String s) {
+        return group(null, s);
+    }
 
     public RegExp referToGroup(String name) {
         regExpString += "\\" + groupNameToIdx.get(name);
@@ -85,11 +93,64 @@ public class RegExp {
      * @return
      */
     public RegExp range(String fromChar, String toChar) {
-        if (fromChar.length() != 1 || toChar.length() != 1) {
-            throw new IllegalArgumentException("The character parameters must be exactly 1 in length");
-        }
-        regExpString += "[" + escape(fromChar) + "-" + escape(toChar) + "]";
+        regExpString += "["
+                + escape(checkRangeValue(fromChar)) + "-" + escape(checkRangeValue(toChar))
+                + "]";
         return this;
+    }
+    public RegExp range(String fromChar0, String toChar0, String fromChar1, String toChar1) {
+        regExpString += "["
+                + escape(checkRangeValue(fromChar0)) + "-" + escape(checkRangeValue(toChar0))
+                + escape(checkRangeValue(fromChar1)) + "-" + escape(checkRangeValue(toChar1))
+                + "]";
+        return this;
+    }
+    public RegExp range(String fromChar0, String toChar0, String fromChar1, String toChar1, String fromChar2, String toChar2) {
+        regExpString += "["
+                + escape(checkRangeValue(fromChar0)) + "-" + escape(checkRangeValue(toChar0))
+                + escape(checkRangeValue(fromChar1)) + "-" + escape(checkRangeValue(toChar1))
+                + escape(checkRangeValue(fromChar2)) + "-" + escape(checkRangeValue(toChar2))
+                + "]";
+        return this;
+    }
+    public RegExp range(String fromChar0, String toChar0, String fromChar1, String toChar1, String fromChar2, String toChar2, String fromChar3, String toChar3) {
+        regExpString += "["
+                + escape(checkRangeValue(fromChar0)) + "-" + escape(checkRangeValue(toChar0))
+                + escape(checkRangeValue(fromChar1)) + "-" + escape(checkRangeValue(toChar1))
+                + escape(checkRangeValue(fromChar2)) + "-" + escape(checkRangeValue(toChar2))
+                + escape(checkRangeValue(fromChar3)) + "-" + escape(checkRangeValue(toChar3))
+                + "]";
+        return this;
+    }
+    public RegExp range(String fromChar0, String toChar0, String fromChar1, String toChar1, String fromChar2, String toChar2, String fromChar3, String toChar3, String fromChar4, String toChar4) {
+        regExpString += "["
+                + escape(checkRangeValue(fromChar0)) + "-" + escape(checkRangeValue(toChar0))
+                + escape(checkRangeValue(fromChar1)) + "-" + escape(checkRangeValue(toChar1))
+                + escape(checkRangeValue(fromChar2)) + "-" + escape(checkRangeValue(toChar2))
+                + escape(checkRangeValue(fromChar3)) + "-" + escape(checkRangeValue(toChar3))
+                + escape(checkRangeValue(fromChar4)) + "-" + escape(checkRangeValue(toChar4))
+                + "]";
+        return this;
+    }
+    public RegExp range(String... fromToChars) {
+        if (fromToChars.length == 0) {
+            throw new IllegalArgumentException("You need to provide at least 2 values");
+        }
+        if (fromToChars.length % 2 != 0) {
+            throw new IllegalArgumentException("You need to provide always pairs of 2");
+        }
+        regExpString += "[";
+        for (int i = 0; i < fromToChars.length; i += 2) {
+            regExpString += escape(checkRangeValue(fromToChars[i])) + "-" + escape(checkRangeValue(fromToChars[i + 1]));
+        }
+        regExpString += "]";
+        return this;
+    }
+    private String checkRangeValue(String s) {
+        if (s.length() != 1) {
+            throw new IllegalArgumentException("The range character parameters must be exactly 1 in length");
+        }
+        return s;
     }
 
     /**

@@ -2,12 +2,18 @@ package org.tbee.regexpbuilder;
 
 public class RE {
 
-    public RegExp group(String name, String s) {
+    static public RegExp group(String name, String s) {
         return RegExp.of().group(name, s);
     }
 
-    public RegExp group(String name, RegExp regExp) {
+    static public RegExp group(String name, RegExp regExp) {
         return RegExp.of().group(name, regExp);
+    }
+    static public RegExp group(RegExp regExp) {
+        return RegExp.of().group(regExp);
+    }
+    static public RegExp group(String s) {
+        return RegExp.of().group(s);
     }
 
     // -------------------------
@@ -18,6 +24,21 @@ public class RE {
     }
     static public RegExp range(String fromChar, String toChar) {
         return RegExp.of().range(fromChar, toChar);
+    }
+    static public RegExp range(String fromChar0, String toChar0, String fromChar1, String toChar1) {
+        return RegExp.of().range(fromChar0, toChar0, fromChar1, toChar1);
+    }
+    static public RegExp range(String fromChar0, String toChar0, String fromChar1, String toChar1, String fromChar2, String toChar2) {
+        return RegExp.of().range(fromChar0, toChar0, fromChar1, toChar1, fromChar2, toChar2);
+    }
+    static public RegExp range(String fromChar0, String toChar0, String fromChar1, String toChar1, String fromChar2, String toChar2, String fromChar3, String toChar3) {
+        return RegExp.of().range(fromChar0, toChar0, fromChar1, toChar1, fromChar2, toChar2, fromChar3, toChar3);
+    }
+    static public RegExp range(String fromChar0, String toChar0, String fromChar1, String toChar1, String fromChar2, String toChar2, String fromChar3, String toChar3, String fromChar4, String toChar4) {
+        return RegExp.of().range(fromChar0, toChar0, fromChar1, toChar1, fromChar2, toChar2, fromChar3, toChar3, fromChar4, toChar4);
+    }
+    public RegExp range(String... fromToChars) {
+        return RegExp.of().range(fromToChars);
     }
 
     static public RegExp oneOf(RegExp regExp) {

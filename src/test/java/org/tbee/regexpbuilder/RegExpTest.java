@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.tbee.regexpbuilder.RE.*;
 
@@ -23,6 +24,13 @@ public class RegExpTest {
         RegExp regExp = RegExp.of()
                 .range("0", "9");
         Assertions.assertEquals("[0-9]", regExp.toString());
+    }
+
+    @Test
+    public void rangeLongTest() {
+        RegExp regExp = RegExp.of()
+                .range("0", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J");
+        Assertions.assertEquals("[0-9A-BC-DE-FG-HI-J]", regExp.toString());
     }
 
     @Test
@@ -250,6 +258,48 @@ public class RegExpTest {
         Assertions.assertEquals("HTTP/1.1", matcher.group(regExp.indexOf("http")));
         Assertions.assertEquals("200", matcher.group(regExp.indexOf("status")));
         Assertions.assertEquals("2048", matcher.group(regExp.indexOf("size")));
+    }
+
+    @Test
+    public void datePatternTest() {
+        RegExp regExp = RegExp.of()
+                .group("year", occurs(4, digit()))
+                .text("-")
+                .group("month", occurs(2, digit()))
+                .text("-")
+                .group("day", occurs(2, digit()))
+                .text("T")
+                .group("hour", occurs(2, digit()))
+                .text(":")
+                .group("minute", occurs(2, digit()))
+                .text(":")
+                .group("second", occurs(2, digit()));
+
+        // https://github.com/sgreben/regex-builder#examples
+        System.out.println(regExp.toString());
+        String dateStr = "2023-03-17T15:59:00";
+        Matcher matcher = regExp.toMatcher(dateStr);
+        Assertions.assertTrue(matcher.matches());
+        Assertions.assertEquals("2023", matcher.group(regExp.indexOf("year")));
+        Assertions.assertEquals("03", matcher.group(regExp.indexOf("month")));
+        Assertions.assertEquals("17", matcher.group(regExp.indexOf("day")));
+        Assertions.assertEquals("15", matcher.group(regExp.indexOf("hour")));
+        Assertions.assertEquals("59", matcher.group(regExp.indexOf("minute")));
+        Assertions.assertEquals("00", matcher.group(regExp.indexOf("second")));
+    }
+
+    @Test
+    public void hexColorTest() {
+        RegExp colorchar = range("a", "f", "A", "F", "0", "9");
+        RegExp regExp = RegExp.of()
+                .text("#")
+                .group(occurs(3, colorchar))
+                .optional(group(occurs(3, colorchar)));
+
+        // https://github.com/sgreben/regex-builder#examples
+        System.out.println(regExp.toString());
+        Assertions.assertEquals(1, countMatches(regExp.toMatcher("#FFF")));
+        Assertions.assertEquals(1, countMatches(regExp.toMatcher("#FFFFFF")));
     }
 
     private int countMatches(Matcher matcher) {

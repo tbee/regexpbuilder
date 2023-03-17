@@ -60,6 +60,18 @@ matcher.matches();
 matcher.group(regExp.indexOf("datetime"); // returns "21/Jul/2014:9:55:27"
 ```
 
+
+Or pattern reuse:
+
+```java
+// for #ABC or #ABCDEF
+RegExp colorchar = range("a", "f", "A", "F", "0", "9");
+RegExp regExp = RegExp.of()
+    .text("#")
+    .group(occurs(3, colorchar))
+    .optional(group(occurs(3, colorchar)));
+```
+
 The `or()`, `and()`, and `followedBy()` are dummy methods, solely present for readability and may be omitted.
 
 As always; give it a shot, and let me know where I messed up.
